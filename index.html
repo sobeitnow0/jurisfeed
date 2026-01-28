@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>JurisFeed - Concurso Público</title>
+    <style>
+        /* ESTILO VISUAL (CSS) - O "Design" do site */
+        body { font-family: sans-serif; margin: 0; background: #f0f2f5; padding-bottom: 50px; }
+        
+        /* Cabeçalho */
+        header { background: #2c3e50; color: white; padding: 15px; position: sticky; top: 0; text-align: center; font-weight: bold; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        
+        /* Container Principal */
+        #feed { max-width: 600px; margin: 0 auto; padding: 10px; }
+        
+        /* O Card (Postagem) */
+        .card { background: white; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; border-left: 5px solid #ccc; }
+        
+        /* Cores por tipo */
+        .lei { border-left-color: #2196f3; } /* Azul */
+        .juris { border-left-color: #ff5722; } /* Laranja */
+        .sumula { border-left-color: #ffc107; } /* Amarelo */
+        
+        .card-top { padding: 10px 15px; background: #fafafa; font-size: 0.8rem; color: #666; display: flex; justify-content: space-between; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid #eee;}
+        .card-content { padding: 15px; font-size: 1rem; line-height: 1.5; color: #333; }
+        .card-actions { border-top: 1px solid #eee; padding: 10px; text-align: right; }
+        button { background: none; border: none; color: #2c3e50; font-weight: bold; cursor: pointer; }
+
+    </style>
+</head>
+<body>
+
+    <header>⚖️ JurisFeed</header>
+
+    <div id="feed">
+        </div>
+
+    <script>
+        // --- SEU BANCO DE DADOS (Aqui você adiciona novas matérias) ---
+        // Basta copiar uma linha, colar embaixo e mudar o texto.
+        const dados = [
+            { tipo: 'lei', origem: 'CF/88 - Art. 5º', texto: 'A casa é asilo inviolável do indivíduo, ninguém nela podendo penetrar sem consentimento do morador, salvo em caso de flagrante delito ou desastre, ou para prestar socorro, ou, durante o dia, por determinação judicial.' },
+            { tipo: 'sumula', origem: 'Súmula Vinculante 14', texto: 'É direito do defensor, no interesse do representado, ter acesso amplo aos elementos de prova que, já documentados em procedimento investigatório realizado por órgão com competência de polícia judiciária, digam respeito ao exercício do direito de defesa.' },
+            { tipo: 'juris', origem: 'STJ - Penal', texto: 'A quebra da tornozeleira eletrônica para fugir NÃO configura crime de dano (falta dolo específico de destruir), mas configura falta grave na execução penal.' },
+            { tipo: 'lei', origem: 'CPC - Art. 300', texto: 'A tutela de urgência será concedida quando houver elementos que evidenciem a probabilidade do direito e o perigo de dano ou o risco ao resultado útil do processo.' },
+            { tipo: 'juris', origem: 'STF - Constitucional', texto: 'É inconstitucional a lei municipal que proíbe serviços de transporte por aplicativo (Uber/99), por violação à livre iniciativa e concorrência.' }
+        ];
+
+        // --- MÁGICA QUE FAZ O SITE FUNCIONAR ---
+        const feedDiv = document.getElementById('feed');
+
+        function criarPost(item) {
+            return `
+                <div class="card ${item.tipo}">
+                    <div class="card-top">
+                        <span>${item.origem}</span>
+                        <span>${item.tipo.toUpperCase()}</span>
+                    </div>
+                    <div class="card-content">${item.texto}</div>
+                    <div class="card-actions">
+                        <button onclick="alert('Salvo nos favoritos!')">★ SALVAR</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Carrega os dados na tela
+        dados.forEach(dado => {
+            feedDiv.innerHTML += criarPost(dado);
+        });
+    </script>
+</body>
+</html>
