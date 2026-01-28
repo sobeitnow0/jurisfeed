@@ -2,72 +2,139 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>JurisFeed - Concurso Público</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JurisFeed</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-        /* ESTILO VISUAL (CSS) - O "Design" do site */
-        body { font-family: sans-serif; margin: 0; background: #f0f2f5; padding-bottom: 50px; }
+        :root { --primary: #1d9bf0; --bg: #000000; --card: #16181c; --text: #e7e9ea; --gray: #71767b; --border: #2f3336; }
+        body { background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; margin: 0; padding-bottom: 60px; }
         
-        /* Cabeçalho */
-        header { background: #2c3e50; color: white; padding: 15px; position: sticky; top: 0; text-align: center; font-weight: bold; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        /* Layout Mobile-First */
+        .header { position: sticky; top: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); padding: 15px; border-bottom: 1px solid var(--border); z-index: 99; text-align: center; font-weight: bold; font-size: 1.2rem; }
+        .tabs { display: flex; border-bottom: 1px solid var(--border); }
+        .tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; font-weight: bold; color: var(--gray); position: relative; }
+        .tab.active { color: var(--text); }
+        .tab.active::after { content: ''; position: absolute; bottom: 0; left: 25%; width: 50%; height: 4px; background: var(--primary); border-radius: 2px; }
         
-        /* Container Principal */
-        #feed { max-width: 600px; margin: 0 auto; padding: 10px; }
+        /* Feed */
+        .feed { max-width: 600px; margin: 0 auto; min-height: 100vh; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
         
-        /* O Card (Postagem) */
-        .card { background: white; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; border-left: 5px solid #ccc; }
+        /* Post Style */
+        .post { padding: 15px; border-bottom: 1px solid var(--border); display: flex; gap: 12px; transition: 0.2s; }
+        .post:hover { background: rgba(255,255,255,0.03); }
         
-        /* Cores por tipo */
-        .lei { border-left-color: #2196f3; } /* Azul */
-        .juris { border-left-color: #ff5722; } /* Laranja */
-        .sumula { border-left-color: #ffc107; } /* Amarelo */
+        .avatar { width: 48px; height: 48px; border-radius: 50%; background: #333; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; border: 2px solid transparent; }
         
-        .card-top { padding: 10px 15px; background: #fafafa; font-size: 0.8rem; color: #666; display: flex; justify-content: space-between; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid #eee;}
-        .card-content { padding: 15px; font-size: 1rem; line-height: 1.5; color: #333; }
-        .card-actions { border-top: 1px solid #eee; padding: 10px; text-align: right; }
-        button { background: none; border: none; color: #2c3e50; font-weight: bold; cursor: pointer; }
+        /* Cores dos Perfis */
+        .p-stf { border-color: #ffe082; color: #ffe082; }
+        .p-stj { border-color: #ef9a9a; color: #ef9a9a; }
+        .p-penal { border-color: #ce93d8; color: #ce93d8; }
+        .p-civil { border-color: #90caf9; color: #90caf9; }
 
+        .content { width: 100%; }
+        .meta { display: flex; justify-content: space-between; color: var(--gray); font-size: 0.9rem; margin-bottom: 4px; }
+        .author { font-weight: bold; color: var(--text); margin-right: 5px; }
+        .handle { color: var(--gray); }
+        .text { font-size: 1rem; line-height: 1.5; margin-bottom: 10px; white-space: pre-wrap; }
+        .actions { display: flex; justify-content: space-between; color: var(--gray); max-width: 80%; }
+        .material-icons { font-size: 18px; cursor: pointer; }
+        .material-icons:hover { color: var(--primary); }
+        
+        .loading { text-align: center; padding: 20px; color: var(--gray); }
     </style>
 </head>
 <body>
 
-    <header>⚖️ JurisFeed</header>
-
-    <div id="feed">
+    <div class="feed">
+        <div class="header">JurisFeed</div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="filtrar('geral', this)">Feed Geral</div>
+            <div class="tab" onclick="filtrar('updates', this)">🔥 Atualizações</div>
         </div>
 
+        <div id="posts-container">
+            <div class="loading">Buscando atualizações nos Tribunais...</div>
+        </div>
+    </div>
+
     <script>
-        // --- SEU BANCO DE DADOS (Aqui você adiciona novas matérias) ---
-        // Basta copiar uma linha, colar embaixo e mudar o texto.
-        const dados = [
-            { tipo: 'lei', origem: 'CF/88 - Art. 5º', texto: 'A casa é asilo inviolável do indivíduo, ninguém nela podendo penetrar sem consentimento do morador, salvo em caso de flagrante delito ou desastre, ou para prestar socorro, ou, durante o dia, por determinação judicial.' },
-            { tipo: 'sumula', origem: 'Súmula Vinculante 14', texto: 'É direito do defensor, no interesse do representado, ter acesso amplo aos elementos de prova que, já documentados em procedimento investigatório realizado por órgão com competência de polícia judiciária, digam respeito ao exercício do direito de defesa.' },
-            { tipo: 'juris', origem: 'STJ - Penal', texto: 'A quebra da tornozeleira eletrônica para fugir NÃO configura crime de dano (falta dolo específico de destruir), mas configura falta grave na execução penal.' },
-            { tipo: 'lei', origem: 'CPC - Art. 300', texto: 'A tutela de urgência será concedida quando houver elementos que evidenciem a probabilidade do direito e o perigo de dano ou o risco ao resultado útil do processo.' },
-            { tipo: 'juris', origem: 'STF - Constitucional', texto: 'É inconstitucional a lei municipal que proíbe serviços de transporte por aplicativo (Uber/99), por violação à livre iniciativa e concorrência.' }
-        ];
+        let todosPosts = [];
 
-        // --- MÁGICA QUE FAZ O SITE FUNCIONAR ---
-        const feedDiv = document.getElementById('feed');
+        // 1. Definição dos Perfis (A "Persona" de cada Lei)
+        const perfis = {
+            'stf': { nome: 'Supremo Tribunal Federal', handle: '@stf_oficial', css: 'p-stf' },
+            'stj': { nome: 'Superior Tribunal de Justiça', handle: '@stj_cidadania', css: 'p-stj' },
+            'cp':  { nome: 'Código Penal', handle: '@decreto_2848', css: 'p-penal' },
+            'cpc': { nome: 'Processo Civil', handle: '@lei_13105', css: 'p-civil' },
+            'default': { nome: 'Sistema Jurídico', handle: '@legislacao', css: '' }
+        };
 
-        function criarPost(item) {
-            return `
-                <div class="card ${item.tipo}">
-                    <div class="card-top">
-                        <span>${item.origem}</span>
-                        <span>${item.tipo.toUpperCase()}</span>
-                    </div>
-                    <div class="card-content">${item.texto}</div>
-                    <div class="card-actions">
-                        <button onclick="alert('Salvo nos favoritos!')">★ SALVAR</button>
-                    </div>
-                </div>
-            `;
+        // 2. Carregar Dados (Tenta ler o JSON gerado pelo Python, senão usa backup)
+        async function carregarDados() {
+            try {
+                // Tenta buscar o arquivo gerado pelo robô
+                const res = await fetch('db.json'); 
+                if (!res.ok) throw new Error("Sem dados");
+                const data = await res.json();
+                todosPosts = data;
+            } catch (e) {
+                // Dados de Exemplo (Fallback inicial)
+                todosPosts = [
+                    { perfil: 'cp', texto: 'Art. 121: Matar alguém. Pena: reclusão, de seis a vinte anos.', data: new Date().toISOString() },
+                    { perfil: 'cpc', texto: 'Lembrete: Os prazos processuais são contados em dias úteis (Art. 219).', data: new Date().toISOString() }
+                ];
+            }
+            renderizar(todosPosts);
         }
 
-        // Carrega os dados na tela
-        dados.forEach(dado => {
-            feedDiv.innerHTML += criarPost(dado);
-        });
+        // 3. Renderizar na Tela
+        function renderizar(lista) {
+            const container = document.getElementById('posts-container');
+            container.innerHTML = '';
+
+            lista.forEach(post => {
+                const p = perfis[post.perfil] || perfis['default'];
+                const dataFormatada = new Date(post.data).toLocaleDateString('pt-BR');
+
+                const html = `
+                    <div class="post">
+                        <div class="avatar ${p.css}">${p.nome.substring(0,1)}</div>
+                        <div class="content">
+                            <div class="meta">
+                                <div><span class="author">${p.nome}</span> <span class="handle">${p.handle}</span></div>
+                                <span>${dataFormatada}</span>
+                            </div>
+                            <div class="text">${post.texto}</div>
+                            <div class="actions">
+                                <i class="material-icons">chat_bubble_outline</i>
+                                <i class="material-icons">repeat</i>
+                                <i class="material-icons">favorite_border</i>
+                                <i class="material-icons">share</i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        // 4. Filtros
+        function filtrar(tipo, el) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+
+            if (tipo === 'updates') {
+                // Filtra STF e STJ (que vêm do robô)
+                const updates = todosPosts.filter(p => p.perfil === 'stf' || p.perfil === 'stj');
+                renderizar(updates);
+            } else {
+                renderizar(todosPosts);
+            }
+        }
+
+        // Início
+        carregarDados();
     </script>
 </body>
 </html>
