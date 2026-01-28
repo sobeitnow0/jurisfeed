@@ -1,71 +1,58 @@
 import feedparser
 import json
-import os
+import random
 from datetime import datetime
 
-# Configuração das Fontes
+# 1. PEGAR NOTÍCIAS DO STF/STJ (Dinâmico)
 FONTES = {
     'stf': 'https://www.stf.jus.br/portal/rss/noticiasRss.asp',
     'stj': 'https://www.stj.jus.br/web/portal/feed/noticias'
 }
 
-# Carregar banco de dados atual (se existir)
-arquivo_db = 'db.json'
-if os.path.exists(arquivo_db):
-    with open(arquivo_db, 'r', encoding='utf-8') as f:
-        try:
-            posts = json.load(f)
-        except:
-            posts = []
-else:
-    posts = []
+feed_noticias = []
 
-# Posts simulados de Leis (para encher o feed geral)
-# Em um app real, isso viria de uma base de dados de leis
-posts_leis = [
-    { "perfil": "cp", "texto": "💡 Dica: No crime impossível (Art. 17), não se pune a tentativa por ineficácia absoluta do meio ou impropriedade absoluta do objeto.", "data": datetime.now().isoformat() },
-    { "perfil": "cpc", "texto": "⚠️ Atenção: A contagem em dias úteis aplica-se apenas aos prazos processuais (Art. 219). Prazos materiais (decadência/prescrição) são dias corridos.", "data": datetime.now().isoformat() }
-]
-
-novos_posts = []
-
-# BUSCA ATIVA (Scraping)
-print("Iniciando varredura nos Tribunais...")
-
+print("Buscando notícias frescas...")
 for perfil, url in FONTES.items():
     try:
         feed = feedparser.parse(url)
-        # Pega as 3 notícias mais recentes
-        for entry in feed.entries[:3]:
-            # Limpa HTML básico do resumo
-            texto_limpo = entry.summary.replace('<p>', '').replace('</p>', '').replace('<div>', '')
+        for entry in feed.entries[:4]: # Pega as 4 mais recentes de cada
+            texto_limpo = entry.summary.replace('<p>', '').replace('</p>', '').split('<br')[0]
             
             post = {
-                "perfil": perfil,
-                "texto": f"📢 {entry.title}\n\n{texto_limpo[:200]}... [Ler mais no site]",
+                "perfil": perfil, # stf ou stj
+                "nome_autor": perfil.upper() + " Oficial",
+                "texto": f"🚨 PLANTÃO: {entry.title}\n\n{texto_limpo}...",
                 "data": datetime.now().isoformat(),
-                "link": entry.link
+                "tipo": "noticia"
             }
-            
-            # Evita duplicatas (verifica se o título já existe)
-            if not any(p['texto'].startswith(f"📢 {entry.title}") for p in posts):
-                novos_posts.append(post)
-                print(f"Nova notícia encontrada: {entry.title}")
-                
+            feed_noticias.append(post)
     except Exception as e:
-        print(f"Erro ao ler {perfil}: {e}")
+        print(f"Erro no {perfil}: {e}")
 
-# Adiciona posts de leis aleatórios para dar volume (simulação)
-novos_posts.extend(posts_leis)
+# 2. LER AS LEIS FIXAS (Seu arquivo leis.json)
+feed_leis = []
+try:
+    with open('leis.json', 'r', encoding='utf-8') as f:
+        dados_leis = json.load(f)
+        
+        # Transforma o formato simples no formato completo do post
+        for item in dados_leis:
+            feed_leis.append({
+                "perfil": item['perfil'],
+                "texto": item['texto'],
+                "data": datetime.now().isoformat(), # Data fictícia para ordenação
+                "tipo": "lei"
+            })
+    print(f"Carregadas {len(feed_leis)} leis do banco de dados.")
+except FileNotFoundError:
+    print("Arquivo leis.json não encontrado. Usando apenas notícias.")
 
-# Coloca os novos no topo
-posts_atualizados = novos_posts + posts
+# 3. MISTURAR TUDO (O Algoritmo do Feed)
+feed_final = feed_noticias + feed_leis
+random.shuffle(feed_final) # Embaralha para não ficar repetitivo
 
-# Mantém apenas os últimos 100 posts para o arquivo não ficar gigante
-posts_atualizados = posts_atualizados[:100]
+# 4. SALVAR O ARQUIVO QUE O SITE LÊ (db.json)
+with open('db.json', 'w', encoding='utf-8') as f:
+    json.dump(feed_final, f, indent=2, ensure_ascii=False)
 
-# Salva
-with open(arquivo_db, 'w', encoding='utf-8') as f:
-    json.dump(posts_atualizados, f, indent=2, ensure_ascii=False)
-
-print("Banco de dados atualizado com sucesso.")
+print("Feed atualizado e embaralhado com sucesso!")
