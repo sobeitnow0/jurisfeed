@@ -1,0 +1,35 @@
+name: Atualizador Diario
+
+on:
+  schedule:
+    - cron: '0 11 * * *' # Roda as 11:00 UTC (08:00 Brasil)
+  workflow_dispatch: # Permite clicar num botão para rodar manualmente
+
+jobs:
+  atualizar-feed:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Instalar bibliotecas
+        run: pip install feedparser
+
+      - name: Rodar o Robô Scraper
+        run: python scraper.py
+
+      - name: Salvar (Commit) as novidades no GitHub
+        run: |
+          git config --global user.name 'Robô JurisFeed'
+          git config --global user.email 'robo@jurisfeed.com'
+          git add db.json
+          git commit -m "Atualização diária de Jurisprudência" || echo "Nada novo para atualizar"
+          git push
