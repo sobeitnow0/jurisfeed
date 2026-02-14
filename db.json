@@ -1,56 +1,56 @@
 [
   {
-    "perfil": "cpc",
-    "texto": "Art. 300. A tutela de urgência será concedida quando houver elementos que evidenciem a probabilidade do direito e o perigo de dano ou o risco ao resultado útil do processo.",
-    "data": "2026-02-13T11:30:11.979270",
-    "tipo": "lei"
-  },
-  {
-    "perfil": "stf",
-    "texto": "Súmula Vinculante 14: É direito do defensor, no interesse do representado, ter acesso amplo aos elementos de prova que, já documentados em procedimento investigatório realizado por órgão com competência de polícia judiciária, digam respeito ao exercício do direito de defesa.",
-    "data": "2026-02-13T11:30:11.979272",
-    "tipo": "lei"
-  },
-  {
     "perfil": "cf",
     "texto": "Art. 5º, XI - A casa é asilo inviolável do indivíduo, ninguém nela podendo penetrar sem consentimento do morador, salvo em caso de flagrante delito ou desastre, ou para prestar socorro, ou, durante o dia, por determinação judicial.",
-    "data": "2026-02-13T11:30:11.979267",
+    "data": "2026-02-14T11:20:46.928719",
     "tipo": "lei"
   },
   {
     "perfil": "cp",
     "texto": "Art. 17. Não se pune a tentativa quando, por ineficácia absoluta do meio ou por impropriedade absoluta do objeto, é impossível consumar-se o crime (Crime Impossível).",
-    "data": "2026-02-13T11:30:11.979255",
-    "tipo": "lei"
-  },
-  {
-    "perfil": "cf",
-    "texto": "Art. 37. A administração pública direta e indireta de qualquer dos Poderes da União, dos Estados, do Distrito Federal e dos Municípios obedecerá aos princípios de legalidade, impessoalidade, moralidade, publicidade e eficiência.",
-    "data": "2026-02-13T11:30:11.979268",
-    "tipo": "lei"
-  },
-  {
-    "perfil": "cpp",
-    "texto": "Art. 156. A prova da alegação incumbirá a quem a fizer, sendo, porém, facultado ao juiz de ofício ordenar diligências para dirimir dúvida sobre ponto relevante.",
-    "data": "2026-02-13T11:30:11.979266",
-    "tipo": "lei"
-  },
-  {
-    "perfil": "cpc",
-    "texto": "Art. 219. Na contagem de prazo em dias, estabelecido por lei ou pelo juiz, computar-se-ão somente os dias úteis.",
-    "data": "2026-02-13T11:30:11.979271",
-    "tipo": "lei"
-  },
-  {
-    "perfil": "cp",
-    "texto": "Art. 121, § 2º. Homicídio qualificado: se cometido mediante paga ou promessa de recompensa, ou por outro motivo torpe.",
-    "data": "2026-02-13T11:30:11.979264",
+    "data": "2026-02-14T11:20:46.928708",
     "tipo": "lei"
   },
   {
     "perfil": "stj",
     "texto": "Súmula 596: A obrigação resultante do ato ilícito subsiste para os herdeiros do devedor, até as forças da herança.",
-    "data": "2026-02-13T11:30:11.979273",
+    "data": "2026-02-14T11:20:46.928725",
+    "tipo": "lei"
+  },
+  {
+    "perfil": "cpp",
+    "texto": "Art. 156. A prova da alegação incumbirá a quem a fizer, sendo, porém, facultado ao juiz de ofício ordenar diligências para dirimir dúvida sobre ponto relevante.",
+    "data": "2026-02-14T11:20:46.928718",
+    "tipo": "lei"
+  },
+  {
+    "perfil": "stf",
+    "texto": "Súmula Vinculante 14: É direito do defensor, no interesse do representado, ter acesso amplo aos elementos de prova que, já documentados em procedimento investigatório realizado por órgão com competência de polícia judiciária, digam respeito ao exercício do direito de defesa.",
+    "data": "2026-02-14T11:20:46.928724",
+    "tipo": "lei"
+  },
+  {
+    "perfil": "cp",
+    "texto": "Art. 121, § 2º. Homicídio qualificado: se cometido mediante paga ou promessa de recompensa, ou por outro motivo torpe.",
+    "data": "2026-02-14T11:20:46.928716",
+    "tipo": "lei"
+  },
+  {
+    "perfil": "cpc",
+    "texto": "Art. 219. Na contagem de prazo em dias, estabelecido por lei ou pelo juiz, computar-se-ão somente os dias úteis.",
+    "data": "2026-02-14T11:20:46.928722",
+    "tipo": "lei"
+  },
+  {
+    "perfil": "cpc",
+    "texto": "Art. 300. A tutela de urgência será concedida quando houver elementos que evidenciem a probabilidade do direito e o perigo de dano ou o risco ao resultado útil do processo.",
+    "data": "2026-02-14T11:20:46.928721",
+    "tipo": "lei"
+  },
+  {
+    "perfil": "cf",
+    "texto": "Art. 37. A administração pública direta e indireta de qualquer dos Poderes da União, dos Estados, do Distrito Federal e dos Municípios obedecerá aos princípios de legalidade, impessoalidade, moralidade, publicidade e eficiência.",
+    "data": "2026-02-14T11:20:46.928720",
     "tipo": "lei"
   }
 ]
